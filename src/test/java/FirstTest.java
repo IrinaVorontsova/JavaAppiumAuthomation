@@ -12,6 +12,7 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.net.URL;
 import java.util.List;
+import java.util.Locale;
 
 
 public class FirstTest {
@@ -103,6 +104,43 @@ public class FirstTest {
                 5
         );
     }
+
+    @Test
+    public void testAssertTextInSearchResults(){
+        waitForElementAndClick(
+                By.id("org.wikipedia:id/fragment_onboarding_skip_button"),
+                "Cannot find skip button",
+                5
+        );
+        waitForElementAndClick(By.xpath("//*[contains(@text,'Search Wikipedia')]"),
+                "Cannot find search input",
+                5
+        );
+
+        waitForElementAndSendKeys(
+                By.id("org.wikipedia:id/search_src_text"),
+                "JAVA",
+                "Cannot find search line",
+                10);
+
+        waitForElementsPresent(
+                By.id("org.wikipedia:id/search_close_btn"),
+                "Search didn't work",
+                15
+        );
+
+        List<WebElement> webElements = waitForElementsPresent(
+                By.xpath(("//android.widget.FrameLayout[2]/android.widget.FrameLayout[1]/android.widget.FrameLayout/androidx.recyclerview.widget.RecyclerView//android.widget.TextView[1]")),
+                "Cannot find search articles",
+                15
+        );
+
+        for (WebElement element : webElements){
+            Assert.assertTrue(element.getText().toLowerCase(Locale.ROOT).contains("java"));
+        }
+
+    }
+
 
     @Test
     public void firstTest(){
